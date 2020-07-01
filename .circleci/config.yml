@@ -129,5 +129,6 @@ workflows:
                 - develop-drop2
                 - release_candidate
                 - release_candidate_drop2
+                - BACK-646
             tags:
               only: /.*/
