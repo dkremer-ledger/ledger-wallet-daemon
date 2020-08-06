@@ -82,13 +82,14 @@ jobs:
             WALLET_PROXY_ENABLED: 'true'
             WALLET_PROXY_HOST: 0.0.0.0
             WALLET_PROXY_PORT: 3128
+            DATABASE_ENGINE: postgres
             CORE_DATABASE_ENGINE: postgres
             CORE_PG_HOST: 0.0.0.0
             CORE_PG_PORT: 5432
             CORE_PG_USER: ledger
             CORE_PG_PWD: ledger_secret
             CORE_PG_DB_NAME_PREFIX: wdtest_
-            CORE_PG_CONNECTION_POOL_SIZE_PER_WALLET_POOL: 2
+            CORE_PG_CONNECTION_POOL_SIZE_PER_WALLET_POOL: 1
             SBT_OPTS: -Xmx3200m -XX:MaxMetaspaceSize=1024M
       - codecov/upload:
           file: target/scala-2.12/coverage-report/cobertura.xml
