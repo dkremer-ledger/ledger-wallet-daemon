@@ -74,7 +74,7 @@ class HttpCoreClientPool(val ec: ExecutionContext, client: ScalaHttpClientPool) 
         if (size < buffer.length) {
           outputStream.write(buffer, 0, size)
         } else {
-          outputStream.writeBytes(buffer)
+          outputStream.write(buffer, 0, buffer.length)
         }
       } while (size > 0)
       val data = outputStream.toByteArray
