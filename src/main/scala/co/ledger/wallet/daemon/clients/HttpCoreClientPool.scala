@@ -8,7 +8,8 @@ import co.ledger.core._
 import co.ledger.wallet.daemon.exceptions.InvalidUrlException
 import co.ledger.wallet.daemon.utils.NetUtils
 import co.ledger.wallet.daemon.utils.Utils.RichTwitterFuture
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream
+
+import java.io.ByteArrayOutputStream
 import com.twitter.finagle.http.{Method, RequestBuilder, Response}
 import com.twitter.inject.Logging
 import com.twitter.io.Buf
@@ -65,18 +66,18 @@ class HttpCoreClientPool(val ec: ExecutionContext, client: ScalaHttpClientPool) 
   private def readResponseBody(resp: Response, onError: Boolean): HttpReadBodyResult = {
     val response = new BufferedInputStream(resp.getInputStream)
     val buffer = new Array[Byte](PROXY_BUFFER_SIZE)
-    val outputStream = new ByteOutputStream()
+    val outputStream = new ByteArrayOutputStream()
     try {
       var size = 0
       do {
         size = response.read(buffer)
         if (size < buffer.length) {
-          outputStream.write(buffer.slice(0, size))
+          outputStream.write(buffer, 0, size)
         } else {
-          outputStream.write(buffer)
+          outputStream.writeBytes(buffer)
         }
       } while (size > 0)
-      val data = outputStream.getBytes
+      val data = outputStream.toByteArray
       if (onError) error(s"HTTP call is on error. Received content : (${resp.getContentString()}) ")
       new HttpReadBodyResult(null, data)
     } catch {
